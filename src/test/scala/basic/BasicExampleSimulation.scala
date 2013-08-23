@@ -10,7 +10,7 @@ import assertions._
 
 class BasicExampleSimulation extends Simulation {
 
-	val httpConf = httpConfig
+	val httpConf = http
 		.baseURL("http://excilys-bank-web.cloudfoundry.com")
 		.acceptCharsetHeader("ISO-8859-1,utf-8;q=0.7,*;q=0.7")
 		.acceptHeader("text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8")
@@ -90,8 +90,8 @@ class BasicExampleSimulation extends Simulation {
 				.get("/public/login.html")
 				.headers(headers_1))
 
-	setUp(scn.inject(ramp(3 users) over(10 seconds)).protocolConfig(httpConf))
-
-	assertThat(global.successfulRequests.percent.is(100),details("Login" / "request_2").responseTime.max.lessThan(2000))
-	assertThat(details("request_9").requestsPerSec.greaterThan(10))
+//	setUp(scn.inject(ramp(3 users) over(10 seconds)).protocols(httpConf))
+	
+//	assertThat(global.successfulRequests.percent.is(100),details("Login" / "request_2").responseTime.max.lessThan(2000))
+//	assertThat(details("request_9").requestsPerSec.greaterThan(10))
 }
