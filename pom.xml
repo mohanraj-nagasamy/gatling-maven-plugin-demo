@@ -25,7 +25,7 @@
 
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-		<gatling.version>2.0.0-M1</gatling.version>
+		<gatling.version>2.0.0-M3</gatling.version>
 	</properties>
 
 	<dependencies>
@@ -50,6 +50,10 @@
 							<goal>execute</goal>
 						</goals>
 						<configuration>
+							<jvmArgs>
+								<jvmArg>-DmyExtraParam=foo</jvmArg> 
+							</jvmArgs>
+							
 							<!-- Default values -->
 							<!--<configDir>src/test/resources</configDir>
 							<dataFolder>src/test/resources/data</dataFolder>
@@ -61,6 +65,7 @@
 							</includes>-->
 							<excludes>
 								<exclude>advanced/*.scala</exclude>
+								<exclude>basic/*.scala</exclude>
 							</excludes>
 						</configuration>
 					</execution>
