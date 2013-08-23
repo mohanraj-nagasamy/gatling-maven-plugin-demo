@@ -7,12 +7,12 @@ To test it out, simply execute the following command :
 
 mvn gatling:execute -Dgatling.simulationClass=twitter.TwitterSimulation -Dusers=<no-of-concurent-users> -Dtweets=<no-of-your-tweets> -Dusername=<twitter-user-name> -Dpassword=<twitter-password>
 
-### For below commant:
+### For below mvn command:
 mvn gatling:execute -Dgatling.simulationClass=twitter.TwitterSimulation -Dusers=1 -Dtweets=298 -Dusername=**** -Dpassword=****
 
 It will generate the following report on the terminal. But you can open the html report as well that has got nice charts to look at.
 
-
+```
 ================================================================================
 2013-08-23 15:49:55                                           1s elapsed
 ---- Twitter test --------------------------------------------------------------
@@ -46,3 +46,4 @@ Parsing log file(s) done
 > t > 1200 ms                                            0 (  0%)
 > failed                                                 0 (  0%)
 ================================================================================
+```
