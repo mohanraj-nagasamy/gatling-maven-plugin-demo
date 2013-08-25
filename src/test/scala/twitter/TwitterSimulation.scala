@@ -29,19 +29,19 @@ class TwitterSimulation extends Simulation {
     .baseURL("https://twitter.com")
     .disableCaching
     .disableResponseChunksDiscarding
-  //    .requestInfoExtractor((request: Request) => {
-  //      println("requestUrl: " + request.getUrl())
-  //      println("requestHeader: " + request.getHeaders())
-  //      println("requestCookies: " + request.getCookies())
-  //      Nil
-  //    })
-  //    .responseInfoExtractor((response: Response) => {
-  //      println("response.getStatusCode() :: " + response.getStatusCode())
-  //      println("responseHeader: " + response.getHeaders())
-  //      println("responseCookies: " + response.getCookies())
-  //      println("responseBody: " + response.getResponseBody())
-  //      Nil
-  //    })
+    .extraInfoExtractor((status: Status, session: Session, request: Request, response: Response) => {
+      println("requestUrl: " + request.getUrl())
+      println("requestHeader: " + request.getHeaders())
+      println("requestCookies: " + request.getCookies())
+
+      println("request.getRawUrl() " + request.getRawUrl())
+      println("response.getStatusCode() :: " + response.getStatusCode())
+      println("responseHeader: " + response.getHeaders())
+      println("responseCookies: " + response.getCookies())
+      //      println("responseBody: " + response.getResponseBody())
+
+      List[String](request.getRawUrl())
+    })
 
   val headers = Map("Accept" -> """text/html,application/xhtml+xml,application/xml""")
   val authenticity_token = regex("""input type="hidden" value="([^"]*)"""").saveAs("authenticity_token")
@@ -59,7 +59,7 @@ class TwitterSimulation extends Simulation {
         session
       })
     .exec(
-      http("post login")
+      http("post login & get the twitter page")
         .post("/sessions")
         .param("session[username_or_email]", username)
         .param("session[password]", password)
@@ -71,7 +71,12 @@ class TwitterSimulation extends Simulation {
       println("session after login: " + session)
       session
     })
+    .exec(
+      http("logout from twitter")
+        .post("/logout")
+        .param("authenticity_token", "${authenticity_token}")
+        .headers(headers)
+        .check(status.is(200)))
 
-  val users = atOnce(noOfUsers users)
-  setUp(scn.inject(users)).protocols(httpConf)
+  setUp(scn.inject(atOnce(noOfUsers users))).protocols(httpConf)
 }
