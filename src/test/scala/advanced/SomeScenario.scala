@@ -56,15 +56,15 @@ object SomeScenario {
 						.headers(headers_8))
 				.pause(6, 7)
 		}
-//		.doIf(session => session("username") != "user7") {
-//			exec(
-//				http("request_9")
-//					.get("/logout")
-//					.headers(headers_1)
-//					.check(status.is(302)))
-//				.pause(0 milliseconds, 100 milliseconds)
-//				.exec(http("request_10")
-//					.get("/public/login.html")
-//					.headers(headers_1))
-//		}
+    .doIf(session => session("username").as[String] != "user7") {
+      exec(
+        http("request_9")
+          .get("/logout")
+          .headers(headers_1)
+          .check(status.is(302)))
+        .pause(0 milliseconds, 100 milliseconds)
+        .exec(http("request_10")
+          .get("/public/login.html")
+          .headers(headers_1))
+    }
 }
