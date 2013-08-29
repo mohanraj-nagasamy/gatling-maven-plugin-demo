@@ -9,10 +9,22 @@ To test it out, simply execute the following command :
 mvn gatling:execute -Dgatling.simulationClass=twitter.TwitterSimulation -Dusers=<no-of-concurrent-users> -Dtweets=<no-of-your-tweets> -Dusername=<twitter-user-name> -Dpassword=<twitter-password>
 ```
 
-### For below mvn command:
+### For running twitter simulation:
 
 ```
 mvn gatling:execute -Dgatling.simulationClass=twitter.TwitterSimulation -Dusers=1 -Dtweets=298 -Dusername=**** -Dpassword=****
+```
+
+### For running basic simulation:
+
+```
+mvn gatling:execute -Dgatling.simulationClass=basic.BasicExampleSimulation
+```
+
+### For running advanced simulation:
+
+```
+mvn gatling:execute -Dgatling.simulationClass=advanced.AdvancedExampleSimulation
 ```
 
 It will generate the following report on the terminal. But you can open the html report as well that has got nice charts to look at.
