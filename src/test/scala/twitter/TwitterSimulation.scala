@@ -3,10 +3,8 @@ package twitter
 import io.gatling.core.Predef._
 import io.gatling.http.Predef._
 import io.gatling.jdbc.Predef._
-import io.gatling.http.Headers.Names._
+import io.gatling.http.HeaderNames
 import scala.concurrent.duration._
-import bootstrap._
-import assertions._
 
 class TwitterSimulation extends Simulation {
 
@@ -29,18 +27,18 @@ class TwitterSimulation extends Simulation {
     .baseURL("https://twitter.com")
     .disableCaching
     .disableResponseChunksDiscarding
-    .extraInfoExtractor((status: Status, session: Session, request: Request, response: Response) => {
-      println("requestUrl: " + request.getUrl())
-      println("requestHeader: " + request.getHeaders())
-      println("requestCookies: " + request.getCookies())
+    .extraInfoExtractor(ExtraInfo => {
+      println("requestUrl: " + ExtraInfo.request.getUrl())
+      println("requestHeader: " + ExtraInfo.request.getHeaders())
+      println("requestCookies: " + ExtraInfo.request.getCookies())
 
-      println("request.getRawUrl() " + request.getRawUrl())
-      println("response.getStatusCode() :: " + response.getStatusCode())
-      println("responseHeader: " + response.getHeaders())
-      println("responseCookies: " + response.getCookies())
+      println("request.getRawUrl() " + ExtraInfo.request.getUri().toUrl())
+      println("response.getStatusCode() :: " + ExtraInfo.response.statusCode)
+      println("responseHeader: " + ExtraInfo.response.headers)
+      println("responseCookies: " + ExtraInfo.response.cookies)
       //      println("responseBody: " + response.getResponseBody())
 
-      List[String](request.getRawUrl())
+      List[String](ExtraInfo.request.getUri().toUrl())
     })
 
   val headers = Map("Accept" -> """text/html,application/xhtml+xml,application/xml""")
@@ -61,9 +59,9 @@ class TwitterSimulation extends Simulation {
     .exec(
       http("post login & get the twitter page")
         .post("/sessions")
-        .param("session[username_or_email]", username)
-        .param("session[password]", password)
-        .param("authenticity_token", "${authenticity_token}")
+        .formParam("session[username_or_email]", username)
+        .formParam("session[password]", password)
+        .formParam("authenticity_token", "${authenticity_token}")
         .headers(headers)
         .check(status.is(200))
         .check(regex(checkTweets).exists))
@@ -74,9 +72,9 @@ class TwitterSimulation extends Simulation {
     .exec(
       http("logout from twitter")
         .post("/logout")
-        .param("authenticity_token", "${authenticity_token}")
+        .formParam("authenticity_token", "${authenticity_token}")
         .headers(headers)
         .check(status.is(200)))
 
-  setUp(scn.inject(atOnce(noOfUsers users))).protocols(httpConf)
+  setUp(scn.inject(atOnceUsers(noOfUsers)).protocols(httpConf))
 }
